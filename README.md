@@ -37,7 +37,21 @@ docker compose up --build
 
 The app listens on port 3000. Data lives in the `chalk-data` volume.
 
+## Deploy on Render
+
+For a Node web service, use `npm ci && npm run build` as the build command and `npm start` as the start command. Use Node.js 22.13 or later. Render provides the `PORT` value used by the start script.
+
+Attach a persistent disk mounted at `/var/data` and set `DATABASE_PATH` to `/var/data/chalk.db`. Without persistent storage, SQLite data can be lost on redeploy or restart. Keep this service to one instance; use PostgreSQL if you need multiple instances.
+
+Demo accounts are created only outside production. After registering the intended officer account, promote it from the Render shell by replacing the email below with that account's email:
+
+```bash
+node -e 'const { DatabaseSync } = require("node:sqlite"); const db = new DatabaseSync(process.env.DATABASE_PATH); const result = db.prepare("UPDATE users SET role = ? WHERE email = ?").run("officer", "approved@campus.edu"); console.log(`Updated ${result.changes} user(s)`); db.close();'
+```
+
 ## Demo accounts
+
+These accounts are for local development only. They are not seeded in production.
 
 | Email | Password | Role |
 |---|---|---|
