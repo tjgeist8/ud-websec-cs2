@@ -1,5 +1,5 @@
 import { currentUser } from "@/lib/actions";
-import db from "@/lib/db";
+import getDb from "@/lib/db";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ export default async function ModPage() {
     );
   }
 
-  const notes = db.prepare("SELECT * FROM officer_desk ORDER BY id").all();
+  const notes = getDb().prepare("SELECT * FROM officer_desk ORDER BY id").all();
 
   return (
     <main className="narrow">

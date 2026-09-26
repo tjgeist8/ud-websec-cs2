@@ -1,4 +1,4 @@
-import db from "@/lib/db";
+import getDb from "@/lib/db";
 import { currentUser } from "@/lib/actions";
 import { renderMarkdown } from "@/lib/markdown";
 import PostBody from "@/components/PostBody";
@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
   const user = await currentUser();
-  const posts = db.prepare(`
+  const posts = getDb().prepare(`
     SELECT posts.*, users.display_name AS author
     FROM posts
     JOIN users ON users.id = posts.user_id
